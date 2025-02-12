@@ -49,6 +49,10 @@
       "linter": "eslint",
       "style": "scss",
       "unitTestRunner": "jest"
+    },
+    "@nx/angular:component": {
+      "style": "none",
+      "standalone": true
     }
   },
   "defaultProject": "pet-weather-app"

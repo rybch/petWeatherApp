@@ -1,0 +1,38 @@
+<form>
+  <mat-form-field class="example-full-width">
+    <mat-label>Enter the location</mat-label>
+    <input
+      type="text"
+      placeholder="Pick one"
+      aria-label="Number"
+      matInput
+      [formControl]="myControl"
+      [matAutocomplete]="auto"
+    />
+    @for (location of locations$ | async; track location) {
+    <mat-option [value]="location">{{ location }}</mat-option>
+    } @empty { }
+    <mat-autocomplete #auto="matAutocomplete"> </mat-autocomplete>
+  </mat-form-field>
+</form>
+@for (group of forecastGroup$ | async | keyvalue; track group) {
+<h3>{{ group.key }}</h3>
+
+<div class="flex">
+  <!-- Відображає дату -->
+  @for (item of group.value ; track item) {
+
+  <div>
+    <p>
+      🌡 temperature: {{ item.temperature }}°C (feels like
+      {{ item.feelsLike }}°C)
+    </p>
+    <p>💧 Humidity: {{ item.humidity }}%</p>
+    <p>💨 Wind: {{ item.windSpeed }} m/s</p>
+    <p>{{ item.weatherDescription }}</p>
+    <img [src]="item.weatherIcon" alt="Weather Icon" />
+    <hr />
+  </div>
+  }
+</div>
+}
