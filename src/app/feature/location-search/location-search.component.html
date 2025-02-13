@@ -1,0 +1,29 @@
+<form>
+  <mat-form-field class="example-full-width">
+    <mat-label>Enter the location</mat-label>
+    <input
+      type="text"
+      placeholder="Pick one"
+      aria-label="Number"
+      matInput
+      [formControl]="control"
+      [matAutocomplete]="auto"
+      required
+    />
+
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="locationChange.emit($event.option.value)"
+    >
+      @for (location of locations; track location) {
+      <mat-option [value]="location">{{ location }}</mat-option>
+      } @empty { }
+    </mat-autocomplete>
+    @if (control.invalid && control.errors && control.errors.required) {
+    <mat-error>You must enter a value</mat-error>
+    }
+  </mat-form-field>
+</form>
+@if (error) {
+<mat-error>{{ error }}</mat-error>
+}

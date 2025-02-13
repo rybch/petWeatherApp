@@ -1,11 +1,12 @@
-export interface ForecastItem {
-  date: string;
-  temperature: number;
-  feelsLike: number;
-  humidity: number;
+export interface DailyForecast {
+  date?: string;
+  name?: string;
+  minTemp?: number;
+  maxTemp?: number;
+  temp?: number;
   weatherDescription: string;
   weatherIcon: string;
-  windSpeed: number;
+  humidity?: number;
 }
 
 export interface ForecastResponse {
@@ -13,19 +14,21 @@ export interface ForecastResponse {
     name: string;
     country: string;
   };
-  list: {
-    dt_txt: string;
-    main: {
-      temp: number;
-      feels_like: number;
-      humidity: number;
-    };
-    weather: {
-      description: string;
-      icon: string;
-    }[];
-    wind: {
-      speed: number;
-    };
+  list: ForecastResponseListItem[];
+}
+
+export interface ForecastResponseListItem {
+  dt_txt: string;
+  main: {
+    temp: number;
+    feels_like: number;
+    humidity: number;
+  };
+  weather: {
+    description: string;
+    icon: string;
   }[];
+  wind: {
+    speed: number;
+  };
 }

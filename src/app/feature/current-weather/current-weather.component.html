@@ -1,0 +1,8 @@
+@if (weather) {
+<h2>{{ weather.name }}</h2>
+<h1>{{ weather.temp | number : '1.0-0' }}°C</h1>
+<img [src]="weather.weatherIcon" alt="Weather Icon" />
+
+<p>{{ weather.weatherDescription }}</p>
+<p>{{ weather.humidity }}%</p>
+}
