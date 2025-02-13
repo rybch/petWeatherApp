@@ -1,0 +1,19 @@
+@if (weather) {
+<div class="flex justify-center flex-col items-center">
+  <div class="flex gap-4">
+    <h2 class="text-xl font-semibold">{{ weather.name }}</h2>
+    <button
+      (click)="toggleFavorite.emit(weather.name)"
+      matTooltip="Add to favourites"
+    >
+      ☆
+    </button>
+  </div>
+  <h1 class="text-2xl">{{ weather.temp | number : '1.0-0' }}°C</h1>
+  <img [src]="weather.weatherIcon" alt="Weather Icon" class="w-24 h-24" />
+  <p>{{ weather.weatherDescription }}</p>
+  <p>{{ weather.humidity }}%</p>
+</div>
+} @else { @if (error) {
+<p class="bg-red-400 p-2 border border-red-500 m-auto w-max">{{ error }}</p>
+} }

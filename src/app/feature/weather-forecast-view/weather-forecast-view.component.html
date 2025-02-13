@@ -1,0 +1,18 @@
+<app-location-search
+  [control]="myControl"
+  [locations]="locations$ | async"
+  [favoriteLocations]="favoriteLocations"
+  [error]="locationError"
+  (locationChange)="locationSelected($event)"
+></app-location-search>
+
+<app-current-weather
+  [weather]="weather$ | async"
+  [error]="weatherError"
+  (toggleFavorite)="addToFavorites($event)"
+></app-current-weather>
+
+<app-weather-forecast
+  [forecast]="forecast$ | async"
+  [error]="forecastError"
+></app-weather-forecast>
