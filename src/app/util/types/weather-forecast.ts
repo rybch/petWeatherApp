@@ -19,6 +19,7 @@ export interface ForecastResponse {
 
 export interface ForecastResponseListItem {
   dt_txt: string;
+  name?: string;
   main: {
     temp: number;
     feels_like: number;

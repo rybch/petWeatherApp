@@ -1,5 +1,5 @@
-<form>
-  <mat-form-field class="example-full-width">
+<form class="flex justify-center mt-6">
+  <mat-form-field>
     <mat-label>Enter the location</mat-label>
     <input
       type="text"
@@ -17,13 +17,15 @@
     >
       @for (location of locations; track location) {
       <mat-option [value]="location">{{ location }}</mat-option>
-      } @empty { }
+      } @for (location of favoriteLocations; track location) {
+      <mat-option [value]="location">{{ location }} ☆</mat-option>
+      }
     </mat-autocomplete>
     @if (control.invalid && control.errors && control.errors.required) {
     <mat-error>You must enter a value</mat-error>
     }
   </mat-form-field>
 </form>
-@if (error) {
-<mat-error>{{ error }}</mat-error>
+@if (error && !control.errors?.required) {
+<p class="bg-red-400 p-2 border border-red-500 m-auto w-max">{{ error }}</p>
 }

@@ -17,6 +17,7 @@ import { MatInputModule } from '@angular/material/input';
 export class LocationSearchComponent {
   @Input() control!: FormControl;
   @Input() locations: string[] | null = [];
+  @Input() favoriteLocations: string[] | null = [];
   @Input() error!: string | null;
   @Output() locationChange = new EventEmitter();
 }

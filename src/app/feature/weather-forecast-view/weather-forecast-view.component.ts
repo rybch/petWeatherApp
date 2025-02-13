@@ -3,10 +3,11 @@ import { FormControl, Validators } from '@angular/forms';
 import {
   catchError,
   debounceTime,
-  ignoreElements,
+  EMPTY,
   Observable,
   of,
   switchMap,
+  tap,
 } from 'rxjs';
 import { WeatherForecastServiceService } from 'src/app/data-access/weather-forecast-service/weather-forecast-service.service';
 import { AsyncPipe } from '@angular/common';
@@ -31,42 +32,63 @@ export class WeatherForecastViewComponent implements OnInit {
   locations$!: Observable<string[]>;
   forecast$!: Observable<DailyForecast[]>;
   weather$!: Observable<DailyForecast>;
-  weatherError$!: Observable<string>;
-  forecastError$!: Observable<string>;
-  locationError$!: Observable<string>;
+  weatherError!: string;
+  forecastError!: string;
+  locationError!: string;
+  activeSelection!: string;
+  favoriteLocations: string[] = [];
   httpService = inject(WeatherForecastServiceService);
 
   ngOnInit(): void {
     this.subscribeOnSearch();
+    this.getFavoriteLocations();
   }
 
   locationSelected(location: string) {
-    this.forecast$ = this.httpService.getForecast(location);
-    this.weather$ = this.httpService.getCurrentWeather(location);
-    this.weatherError$ = this.weather$.pipe(
-      ignoreElements(),
-      catchError((err) =>
-        of(err.error.message || err.error.error || 'Something went wrong'),
-      ),
+    this.activeSelection = location;
+    this.forecast$ = this.httpService.getForecast(location).pipe(
+      catchError((err) => {
+        this.forecastError = err;
+        return EMPTY;
+      }),
     );
-    this.forecastError$ = this.forecast$.pipe(
-      ignoreElements(),
-      catchError((err) =>
-        of(err.error.message || err.error.error || 'Something went wrong'),
-      ),
+    this.weather$ = this.httpService.getCurrentWeather(location).pipe(
+      catchError((err) => {
+        this.weatherError = err;
+        return EMPTY;
+      }),
     );
+  }
+
+  addToFavorites(location: string) {
+    if (this.favoriteLocations.includes(location)) {
+      alert('This location is already added to favorite collection');
+      return;
+    }
+    this.favoriteLocations.push(location);
+    localStorage.setItem(
+      'favoriteLocations',
+      JSON.stringify(this.favoriteLocations),
+    );
+  }
+
+  getFavoriteLocations() {
+    const storage = localStorage.getItem('favoriteLocations');
+    this.favoriteLocations = storage ? JSON.parse(storage) : [];
   }
 
   private subscribeOnSearch() {
     this.searchChange$ = this.myControl.valueChanges.pipe(debounceTime(500));
+    const data$ = (param: string) =>
+      this.httpService.getCities(param).pipe(
+        tap(() => (this.locationError = '')),
+        catchError((err) => {
+          this.locationError = err;
+          return of([]);
+        }),
+      );
     this.locations$ = this.searchChange$.pipe(
-      switchMap((res) => this.httpService.getCities(res || '')),
-    );
-    this.locationError$ = this.locations$.pipe(
-      ignoreElements(),
-      catchError((err) =>
-        of(err.error.message || err.error.error || 'Something went wrong'),
-      ),
+      switchMap((param) => data$(param as string)),
     );
   }
 }
