@@ -1,11 +1,11 @@
 @if ( forecast ) {
-<div class="p-6 m-6 bg-gray-50 shadow rounded">
+<div class="p-6 m-6 bg-blue-200 shadow rounded">
   <h2>5-day weather forecast</h2>
   <div
     class="grid grid-rows-5 grid-cols-1 md:grid-rows-1 md:grid-cols-5 divide-y-2 md:divide-y-0 md:divide-x-2 divide-gray-400"
   >
     @for (dailyForecast of forecast ; track dailyForecast) {
-    <div class="bg-gray-100 p-3 flex flex-col items-center">
+    <div class="p-3 flex flex-col items-center">
       <h3>{{ dailyForecast.date | date }}</h3>
       <p>min: {{ dailyForecast.minTemp | number : '1.0-0' }}°C</p>
       <p>max: {{ dailyForecast.maxTemp | number : '1.0-0' }}°C</p>
